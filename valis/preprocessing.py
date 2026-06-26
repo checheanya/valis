@@ -1576,8 +1576,10 @@ def clean_mask(mask, img=None, rel_min_size=0.001):
         colors_to_thresh = colorfulness_img[mask > 0]
         n_colors_to_thresh = len(np.unique(colors_to_thresh))
         if n_colors_to_thresh > 2:
-            color_thresh, _ = filters.threshold_multiotsu(colors_to_thresh)
-
+            try:
+                color_thresh, _ = filters.threshold_multiotsu(colors_to_thresh)
+            except ValueError:
+                color_thresh = 0
         else:
             color_thresh = 0
         color_mask = colorfulness_img > color_thresh
